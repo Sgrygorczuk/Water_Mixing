@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class CutScene : MonoBehaviour
 {
@@ -20,13 +21,14 @@ public class CutScene : MonoBehaviour
     private float _currentY;                                        //Used to check if the screen moved far enough 
     
     //===== Game Flow 
-    private enum GameState             
+    private enum GameState
     {
         PlayingAnimation, 
         MoveScreen,
     }
     
     private GameState _currentState = GameState.PlayingAnimation;      //Keeps track of what state we're currently in
+    public string nextScene = "Level";
     
     // Start is called before the first frame update
     private void Start()
@@ -84,6 +86,7 @@ public class CutScene : MonoBehaviour
         {
             SetAlpha(false);
             _isDonePlaying = false;
+            SceneManager.LoadScene(nextScene);
         }
     }
 
@@ -104,12 +107,14 @@ public class CutScene : MonoBehaviour
     }
     
     
+    //Sets the visibility to either clear or visible for the Button Prompt 
     private void SetAlpha(bool alpha)
     {
         _spaceText.color = alpha ? Color.white : Color.clear;
         _spaceBackground.color = alpha ? Color.black : Color.clear;
     }
 
+    //Gets the length of time an animation lasts and adds it to the List 
     private void GetLenght(Animator anim, string animationName)
     {
         var clips = anim.runtimeAnimatorController.animationClips;
@@ -121,6 +126,7 @@ public class CutScene : MonoBehaviour
         }
     }
 
+    //Gets the animation to play and sets off a coroutine that will give player button access 
     private void PlayAnimation()
     {
         animators[_currentPosition].Play(animationNames[_currentPosition]);

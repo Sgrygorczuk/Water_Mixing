@@ -510,8 +510,7 @@ MonoBehaviour:
   - CutSceneOne
   - CutSceneOneFrameTwo
   - CutSceneOneFrameThree
-  _animationLenght: []
-  _currentPosition: 0
+  nextScene: Level
 --- !u!1 &560408969
 GameObject:
   m_ObjectHideFlags: 0
