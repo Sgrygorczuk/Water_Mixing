@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -11,6 +12,7 @@ public class CutScene : MonoBehaviour
     public List<string> animationNames = new List<string>();       //Holds all the names for each animator we want to call
     private List<float> _animationLenght  = new List<float>();     //Holds hold long each animation lasts 
     private int _currentPosition = 0;                              //Tells us which animation we're playing 
+    private Animator _sceneTransitionCanvas = null; 
     
     //========== Progress Indicators 
     private TextMeshPro _spaceText;                                 //Holds the data to the continue text 
@@ -29,7 +31,9 @@ public class CutScene : MonoBehaviour
     
     private GameState _currentState = GameState.PlayingAnimation;      //Keeps track of what state we're currently in
     public string nextScene = "Level";
-    
+
+
+
     // Start is called before the first frame update
     private void Start()
     {
@@ -67,6 +71,8 @@ public class CutScene : MonoBehaviour
                 MoveScreen();
                 break;
             }
+            default:
+                throw new ArgumentOutOfRangeException();
         }
     }
 
@@ -86,8 +92,16 @@ public class CutScene : MonoBehaviour
         {
             SetAlpha(false);
             _isDonePlaying = false;
-            SceneManager.LoadScene(nextScene);
+            StartCoroutine(ChangeScene());
         }
+    }
+    
+    //Moves you to next scene with a Fade 
+    private IEnumerator ChangeScene()
+    {
+        GameObject.Find($"SceneTransitionCanvas").GetComponent<Animator>().Play($"SceneFadeIn");
+        yield return new WaitForSeconds(1.1f);
+        SceneManager.LoadScene(nextScene);
     }
 
     //When it in between animations the screen moves to the other main page, once it reaches it it starts playing next 
