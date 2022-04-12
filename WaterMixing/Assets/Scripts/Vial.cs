@@ -145,15 +145,19 @@ public class Vial : MonoBehaviour
         //When the bottle is done close it up 
         if (lastActive == 3 && CheckIfClosed())
         {
-            CloseBottle();
+            StartCoroutine(CloseBottle());
         }
     }
 
     //Closes the bottle by changing the sprite and playing a SFX 
-    private void CloseBottle()
+    private IEnumerator CloseBottle()
     {
+        _animator.Play($"Vail_Change");
+        yield return new WaitForSeconds(1);
         _spriteRenderer.sprite = fullVailSprite;
         //TODO Play sound effect 
+        yield return new WaitForSeconds(1);
+        GameObject.Find($"GameFlow").GetComponent<GameFlow>().AddFull();
     }
 
     //If the vail is empty we just replace the clear with whatever color we want 
@@ -209,15 +213,15 @@ public class Vial : MonoBehaviour
     //If they have a vail in hand they will attempt to pour into the new selection 
     private void OnMouseDown()
     {
-        if (GameObject.Find($"Camera").GetComponent<GameFlow>().IsHoldingVial() && !_isClosed && !_isActive)
+        if (GameObject.Find($"GameFlow").GetComponent<GameFlow>().IsHoldingVial() && !_isClosed && !_isActive)
         {
             if(IsEmpty()) return;
-            GameObject.Find($"Camera").GetComponent<GameFlow>().HoldVial(transform.GetComponent<Vial>());
+            GameObject.Find($"GameFlow").GetComponent<GameFlow>().HoldVial(transform.GetComponent<Vial>());
         }
         else
         {
             if(_isActive || IsFull()) return;
-            GameObject.Find($"Camera").GetComponent<GameFlow>().MoveToPour(transform.GetComponent<Vial>());
+            GameObject.Find($"GameFlow").GetComponent<GameFlow>().MoveToPour(transform.GetComponent<Vial>());
         }
     }
 }

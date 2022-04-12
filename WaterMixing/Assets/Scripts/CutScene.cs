@@ -58,6 +58,11 @@ public class CutScene : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            StartCoroutine(ChangeScene());
+        }
+        
         //Checks what state the game is currently in and updates it 
         switch (_currentState)
         {

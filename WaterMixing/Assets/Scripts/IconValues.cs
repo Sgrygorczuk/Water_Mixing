@@ -10,12 +10,9 @@ public class IconValues : MonoBehaviour
     }
     
     public IconValue currentIconState = IconValue.CantBeAccessed;     //Current state of the icon
-
-    //Updates the state, if state is
-    //              true moves from CanBeAccessedNoWin to CanBeAccessedWin     
-    //              false it moves from CantBeAccessed to CanBeAccessedNoWin
-    public void SetIconValue(bool state)
+    
+    public void SetIconValue(IconValue iconValue)
     {
-        currentIconState = state ? IconValue.CanBeAccessedWin : IconValue.CanBeAccessedNoWin;
+        currentIconState = iconValue;
     }
 }

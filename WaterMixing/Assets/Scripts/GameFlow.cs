@@ -4,12 +4,38 @@ using UnityEngine;
 public class GameFlow : MonoBehaviour
 {
     //====== Misc 
-    public Vial heldVial; //Tells us if a user has already clicked on a vial
+    public Vial heldVial;    //Tells us if a user has already clicked on a vial
+    public int levelNumber;  //Tells us which var to update in the persistant data 
+
+    //==== Level Win State 
+    public int fullVialsNeeded;         //Tells us the goal player is going for     
+    private int _fullVialsCurrent = 0;  //Tells us how far the player has accomplished the goal 
     
     //Checks if there is a vial in hand, otherwise the use will select it as it's current vial 
     public bool IsHoldingVial()
     {
         return heldVial == null;
+    }
+
+    //Adds a counter to how many vials have been completed, once the number is full we start to exit the level 
+    public void AddFull()
+    {
+        _fullVialsCurrent++;
+
+        if (_fullVialsCurrent != fullVialsNeeded) return;
+        
+        //Move in the visuals for completing the level 
+        GetComponent<Animator>().Play($"GameFlowEnd");
+
+        //Turn off all box colliders so you can't touch the vials 
+        var vials = GameObject.Find($"Vials").transform;
+        for (var i = 0; i < vials.childCount - 1; i++)
+        {
+            vials.GetChild(i).GetComponent<BoxCollider2D>().enabled = false;
+        }
+
+        //Updates the persistent data 
+        GameObject.Find($"PersistentData").GetComponent<PersistentData>().SetLevelState(levelNumber);
     }
 
     //Copies whatever vail the user clicked to be the currently held vial 
